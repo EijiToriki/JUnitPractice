@@ -4,26 +4,75 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class CalculatorTest {
+public class CalculatorTest {
 
 	@Test
-	void testAdd() {
-
+	public void testAdd() {
+		// オブジェクトの生成
+		Calculator calculator = new Calculator();
+		// 期待値
+		int expected = 5;
+		// 実測値
+		int actual = calculator.add(3, 2);
+		// 期待値と実測値の比較
+		assertEquals(expected, actual);
 	}
 
 	@Test
-	void testSub() {
-		fail("まだ実装されていません");
+	public void testSub() {
+		// オブジェクトの生成
+		Calculator calculator = new Calculator();
+		// 期待値
+		int expected = 1;
+		// 実測値
+		int actual = calculator.sub(3, 2);
+		// 期待値と実測値の比較
+		assertEquals(expected, actual);
 	}
 
 	@Test
-	void testMul() {
-		fail("まだ実装されていません");
+	public void testMul() {
+		// オブジェクトの生成
+		Calculator calculator = new Calculator();
+		// 期待値
+		int expected = 6;
+		// 実測値
+		int actual = calculator.mul(3, 2);
+		// 期待値と実測値の比較
+		assertEquals(expected, actual);
 	}
 
 	@Test
-	void testDiv() {
-		fail("まだ実装されていません");
+	public void testDiv() {
+		// オブジェクトの生成
+		Calculator calculator = new Calculator();
+		// 期待値
+		float expected = (float) 1.5;
+		// 実測値
+		float actual = calculator.div(3, 2);
+		// 期待値と実測値の比較
+		assertEquals(expected, actual);
 	}
+	
+	@Test
+	public void testDivException() {
+		// オブジェクトの生成
+		Calculator calculator = new Calculator();
+		// 例外テスト
+		assertThrows(IllegalArgumentException.class, () -> calculator.div(3, 0));
+	}
+	
+	@Test
+	public void testDivException2() {
+		// オブジェクトの生成
+		Calculator calculator = new Calculator();
+		try {
+			calculator.div(3, 0);
+			fail();
+		}catch (IllegalArgumentException ie) {
+			assertEquals("第二引数に0が指定されました", ie.getMessage());
+		}
+	}
+	
 
 }
