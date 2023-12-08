@@ -23,6 +23,9 @@ public class CalculatorTest {
 		Calculator calculator = new Calculator();
 		// 例外テスト
 		assertThrows(IllegalArgumentException.class, () -> calculator.taxPrice(-110));
+		
+		IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> calculator.taxPrice(-110));
+		assertEquals("価格は0円以上にしてください", e.getMessage());
 	}
 
 }

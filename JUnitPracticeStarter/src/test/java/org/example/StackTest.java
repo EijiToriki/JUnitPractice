@@ -11,32 +11,44 @@ import org.junit.jupiter.api.Test;
 
 public class StackTest {
     public Stack<String> stack;
-    public String anElement = "要素1";
-
-    @Test
-    public void isEmpty() {
-        stack = new Stack<>();
-        assertTrue(stack.isEmpty());
+    
+    @BeforeEach
+    public void setup() {
+    	stack = new Stack<>();
     }
 
-    @Test
-    public void throwsExceptionWhenPopped() {
-        stack = new Stack<>();
-        assertThrows(EmptyStackException.class, () -> stack.pop());
+    @Nested
+    public class EmptyStackTest{ 
+	    @Test
+	    public void isEmpty() {
+	        assertTrue(stack.isEmpty());
+	    }
+	
+	    @Test
+	    public void throwsExceptionWhenPopped() {
+	        assertThrows(EmptyStackException.class, () -> stack.pop());
+	    }
     }
 
-    @Test
-    public void isNotEmpty() {
-        stack = new Stack<>();
-        stack.push(anElement);
-        assertFalse(stack.isEmpty());
-    }
-
-    @Test
-    public void returnElementWhenPopped() {
-        stack = new Stack<>();
-        stack.push(anElement);
-        assertEquals(anElement, stack.pop());
+   
+    @Nested
+    public class AfterPushing{
+    	public String anElement = "要素1";
+    	
+    	@BeforeEach
+    	public void setupPush() {
+    		stack.push(anElement);
+    	}
+    	
+	    @Test
+	    public void isNotEmpty() {
+	        assertFalse(stack.isEmpty());
+	    }
+	
+	    @Test
+	    public void returnElementWhenPopped() {
+	        assertEquals(anElement, stack.pop());
+	    }
     }
 
 }
