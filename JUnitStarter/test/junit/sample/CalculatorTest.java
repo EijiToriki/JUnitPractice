@@ -2,14 +2,21 @@ package junit.sample;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 public class CalculatorTest {
+	
+	Calculator calculator;
+	@BeforeEach
+	public void setup() {
+		calculator = new Calculator();
+	}
 
 	@Test
 	public void testAdd() {
-		// オブジェクトの生成
-		Calculator calculator = new Calculator();
 		// 期待値
 		int expected = 5;
 		// 実測値
@@ -20,8 +27,6 @@ public class CalculatorTest {
 
 	@Test
 	public void testSub() {
-		// オブジェクトの生成
-		Calculator calculator = new Calculator();
 		// 期待値
 		int expected = 1;
 		// 実測値
@@ -32,8 +37,6 @@ public class CalculatorTest {
 
 	@Test
 	public void testMul() {
-		// オブジェクトの生成
-		Calculator calculator = new Calculator();
 		// 期待値
 		int expected = 6;
 		// 実測値
@@ -42,37 +45,36 @@ public class CalculatorTest {
 		assertEquals(expected, actual);
 	}
 
-	@Test
-	public void testDiv() {
-		// オブジェクトの生成
-		Calculator calculator = new Calculator();
-		// 期待値
-		float expected = (float) 1.5;
-		// 実測値
-		float actual = calculator.div(3, 2);
-		// 期待値と実測値の比較
-		assertEquals(expected, actual);
-	}
 	
-	@Test
-	public void testDivException() {
-		// オブジェクトの生成
-		Calculator calculator = new Calculator();
-		// 例外テスト
-		assertThrows(IllegalArgumentException.class, () -> calculator.div(3, 0));
-	}
-	
-	@Test
-	public void testDivException2() {
-		// オブジェクトの生成
-		Calculator calculator = new Calculator();
-		try {
-			calculator.div(3, 0);
-			fail();
-		}catch (IllegalArgumentException ie) {
-			assertEquals("第二引数に0が指定されました", ie.getMessage());
+	@Nested
+	public class DivTest{
+		@Test
+		public void testDiv() {
+			// 期待値
+			float expected = (float) 1.5;
+			// 実測値
+			float actual = calculator.div(3, 2);
+			// 期待値と実測値の比較
+			assertEquals(expected, actual);
+		}
+		
+		@Test
+		@Tag("Exception")
+		public void testDivException() {
+			// 例外テスト
+			assertThrows(IllegalArgumentException.class, () -> calculator.div(3, 0));
+		}
+		
+		@Test
+		@Tag("Exception")
+		public void testDivException2() {
+			try {
+				calculator.div(3, 0);
+				fail();
+			}catch (IllegalArgumentException ie) {
+				assertEquals("第二引数に0が指定されました", ie.getMessage());
+			}
 		}
 	}
 	
-
 }
