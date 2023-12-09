@@ -1,8 +1,11 @@
 package junit.sample;
 
+import static org.junit.Assume.assumeTrue;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -17,6 +20,7 @@ public class CalculatorTest {
 
 	@Test
 	public void testAdd() {
+		assumeTrue("DEV".equals(System.getenv("ENV")));
 		// 期待値
 		int expected = 5;
 		// 実測値
@@ -27,12 +31,17 @@ public class CalculatorTest {
 
 	@Test
 	public void testSub() {
-		// 期待値
-		int expected = 1;
-		// 実測値
-		int actual = calculator.sub(3, 2);
-		// 期待値と実測値の比較
-		assertEquals(expected, actual);
+		assumingThat("DEV".equals(System.getenv("ENV")), 
+				() -> {
+					// 期待値
+					int expected = 1;
+					// 実測値
+					int actual = calculator.sub(3, 2);
+					// 期待値と実測値の比較
+					assertEquals(expected, actual);
+					System.out.println("(1)テスト実行");
+				});
+		System.out.println("(2)テスト終了");
 	}
 
 	@Test
@@ -59,6 +68,7 @@ public class CalculatorTest {
 		}
 		
 		@Test
+		@Disabled
 		@Tag("Exception")
 		public void testDivException() {
 			// 例外テスト
