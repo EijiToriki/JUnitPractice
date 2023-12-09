@@ -2,13 +2,21 @@ package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class CalculatorTest {
+	
+	Calculator calculator;
+	@BeforeEach
+	public void setup() {
+		calculator = new Calculator();
+	}
+	
 	@Test
 	public void testTaxPrice() {
-		// オブジェクトの生成
-		Calculator calculator = new Calculator();
 		// 期待値
 		int expected = 110;
 		// 実測値
@@ -19,13 +27,24 @@ public class CalculatorTest {
 	
 	@Test
 	public void testTaxPriceException() {
-		// オブジェクトの生成
-		Calculator calculator = new Calculator();
 		// 例外テスト
 		assertThrows(IllegalArgumentException.class, () -> calculator.taxPrice(-110));
 		
 		IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> calculator.taxPrice(-110));
 		assertEquals("価格は0円以上にしてください", e.getMessage());
+	}
+	
+	@ParameterizedTest
+	@CsvSource({
+		"8, 100, 108",
+		"8, 3000, 3240",
+		"10, 50, 55",
+		"8, 50, 54",
+		"5, 50, 52"
+	})
+	public void testTaxPriceParameterized(int rate, int price, int expected) {
+		int actual = calculator.taxPrice(rate, price);
+		assertEquals(expected, actual);
 	}
 
 }

@@ -1,5 +1,7 @@
 package org.example;
 
+import static org.junit.jupiter.api.Assumptions.*;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.EnabledOnOs;
@@ -10,18 +12,19 @@ public class OsTest {
     @Test
     @EnabledOnOs(OS.WINDOWS)
     public void winTest() {
+    	assumeTrue(System.getProperty("os.name").contains("Windows"));
         System.out.println("このテストはWindows環境で実行されます");
     }
 
     @Test
-    @EnabledOnOs(OS.MAC)
     public void macTest() {
+    	assumeTrue(System.getProperty("os.name").contains("Mac"));
         System.out.println("このテストはMac OS環境で実行されます");
     }
 
     @Test
-    @EnabledOnOs(OS.LINUX)
     public void linuxTest() {
+    	assumeTrue(System.getProperty("os.name").contains("Linux"));
         System.out.println("このテストはLinux環境で実行されます");
     }
 
@@ -34,12 +37,18 @@ public class OsTest {
     @Test
     @DisabledOnOs(OS.MAC)
     public void disabledMacTest() {
+    	assumingThat(System.getProperty("os.name").contains("Windows"), () -> {
+    		System.out.println("【not Mac】このテストはWindows環境で実行されます");
+    	});
         System.out.println("このテストはMac OS環境では実行されません");
     }
 
     @Test
     @DisabledOnOs(OS.LINUX)
     public void disabledLinuxTest() {
+    	assumingThat(System.getProperty("os.name").contains("Windows"), () -> {
+    		System.out.println("【not Linux】このテストはWindows環境で実行されます");
+    	});
         System.out.println("このテストはLinux環境では実行されません");
     }
 }
