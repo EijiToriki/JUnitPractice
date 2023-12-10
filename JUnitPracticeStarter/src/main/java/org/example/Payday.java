@@ -5,8 +5,13 @@ import java.time.LocalDate;
 public class Payday {
 	private LocalDate date;
 	private final int PAYDAY_TIME = 25;
-	public Payday(){
-		this.date = LocalDate.now();
+	
+	public Payday() {
+		this(LocalDate.now());
+	}
+	
+	public Payday(LocalDate currentLocalDate){
+		this.date = currentLocalDate;
 	}
 	public int getNextPayday(){
 		int today = date.getDayOfMonth();
