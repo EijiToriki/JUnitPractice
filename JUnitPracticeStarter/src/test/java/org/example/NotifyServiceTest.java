@@ -1,6 +1,7 @@
 package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.DisplayName;
@@ -58,36 +59,54 @@ public class NotifyServiceTest {
 
     }
 
-//    @Test
-//    @DisplayName("ユーザーが存在しない場合のテスト")
-//    public void test2() throws Exception{
-//        // (3-1) UserServiceのgetUserEMailAddressのスタブを設定
-//
-//        // テスト対象の実行
-//        assertThrows(
-//                UserNotFoundException.class,
-//                () -> notifyService.notify("2", "こんにちは"));
-//    }
-//
-//    @Test
-//    @DisplayName("メッセージに「機密」が含まれていた場合のテスト")
-//    public void test3() throws Exception{
-//        // (4-1) UserServiceのgetUserEMailAddressのスタブを設定
-//
-//        // テスト対象の実行
-//        notifyService.notify("1", "このメッセージには機密情報が含まれています");
-//
-//        // (4-2) SendEMailServiceのsendメソッドの実行回数の検査と渡された各引数を検査
-//    }
-//
-//    @Test
-//    @DisplayName("メールの送信失敗時のテスト")
-//    public void test4() throws Exception{
-//        // (5-1) SendEMailServiceのsendのスタブを設定(例外をスロー)
-//
-//        // テスト対象の実行
-//        assertThrows(
-//                SendEMailFailureException.class,
-//                () -> notifyService.notify("1", "こんにちは"));
-//    }
+    @Test
+    @DisplayName("ユーザーが存在しない場合のテスト")
+    public void test2() throws Exception{
+        // (3-1) UserServiceのgetUserEMailAddressのスタブを設定
+//    	doThrow(new UserNotFoundException()).when(userService).getUserEMailAddress("2");
+    	when(userService.getUserEMailAddress("2")).thenThrow(new UserNotFoundException());
+    	
+        // テスト対象の実行
+        assertThrows(
+                UserNotFoundException.class,
+                () -> notifyService.notify("2", "こんにちは"));
+    }
+
+    @Test
+    @DisplayName("メッセージに「機密」が含まれていた場合のテスト")
+    public void test3() throws Exception{
+        // (4-1) UserServiceのgetUserEMailAddressのスタブを設定
+    	when(userService.getUserEMailAddress("1")).thenReturn("to1@fuga.com");
+
+        // テスト対象の実行
+        notifyService.notify("1", "このメッセージには機密情報が含まれています");
+
+        // (4-2) SendEMailServiceのsendメソッドの実行回数の検査と渡された各引数を検査
+        verify(sendEMailService, times(2)).send(any(), any(), any());
+        verify(sendEMailService, times(2)).send(toEmailAddressCaptor.capture(), subjectCaptor.capture(), bodyCaptor.capture());  
+        
+        var toEmailAddresses = toEmailAddressCaptor.getAllValues();
+        var subjects = subjectCaptor.getAllValues();
+        var bodys = bodyCaptor.getAllValues();
+        
+        assertEquals("to1@fuga.com", toEmailAddresses.get(0));
+        assertEquals("メッセージ通知", subjects.get(0));
+        assertEquals("このメッセージには機密情報が含まれています", bodys.get(0));
+
+        assertEquals("admin@hoge.com", toEmailAddresses.get(1));
+        assertEquals("確認依頼", subjects.get(1));
+        assertEquals("このメッセージには機密情報が含まれています", bodys.get(1));
+        
+    }
+
+    @Test
+    @DisplayName("メールの送信失敗時のテスト")
+    public void test4() throws Exception{
+        // (5-1) SendEMailServiceのsendのスタブを設定(例外をスロー)
+    	doThrow(new SendEMailFailureException()).when(sendEMailService).send(any(), any(), any());
+        // テスト対象の実行
+        assertThrows(
+                SendEMailFailureException.class,
+                () -> notifyService.notify("1", "こんにちは"));
+    }
 }

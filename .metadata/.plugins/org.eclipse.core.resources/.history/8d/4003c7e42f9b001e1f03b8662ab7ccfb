@@ -1,0 +1,10 @@
+package junit.sample;
+
+public class Calculator2 {
+
+	public Integer add(int i, int j) {
+		// TODO 自動生成されたメソッド・スタブ
+		return 5;
+	}
+
+}

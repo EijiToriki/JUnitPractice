@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="メソッド &apos;private LocalDateTime extracted()&apos; を &apos;junit.sample.DateExample.setMessage()&apos; から &apos;junit.sample.DateExample&apos; へ抽出します&#x0D;&#x0A;- 元のプロジェクト: &apos;JUnitStarter&apos;&#x0D;&#x0A;- メソッド名: &apos;extracted&apos;&#x0D;&#x0A;- 宛先タイプ: &apos;junit.sample.DateExample&apos;&#x0D;&#x0A;- 宣言された可視性: &apos;private&apos;" comments="false" description="メソッド &apos;extracted&apos; の抽出" destination="0" exceptions="false" flags="786434" id="org.eclipse.jdt.ui.extract.method" input="/src&lt;junit.sample{DateExample.java" name="extracted" replace="false" selection="449 19" stamp="1702187998642" version="1.0" visibility="2"/>
+</session>
